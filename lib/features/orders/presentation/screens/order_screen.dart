@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../domain/entities/order.dart';
+import '../providers/draft_providers.dart';
 import '../providers/orders_providers.dart';
+import '../../../catalog/presentation/providers/catalog_providers.dart';
 
-/// Pedido actual mínimo: crea pedido demo con items 1x1 para validar flujo.
-/// El lector QR real (SDK) lo alimenta en el siguiente paso.
+/// Pedido actual: borrador compartido con catálogo.
 class OrderScreen extends ConsumerStatefulWidget {
   const OrderScreen({super.key});
   @override
@@ -14,18 +14,21 @@ class OrderScreen extends ConsumerStatefulWidget {
 }
 
 class _OrderScreenState extends ConsumerState<OrderScreen> {
-  final List<OrderItem> _draft = [];
-
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => ref.read(ordersProvider.notifier).init());
+    Future.microtask(() {
+      ref.read(ordersProvider.notifier).init();
+      ref.read(catalogProvider.notifier).loadCachedThenRefresh();
+    });
   }
-
-  double get _total => _draft.fold(0, (s, e) => s + e.lineTotal);
 
   @override
   Widget build(BuildContext context) {
+    final draft = ref.watch(draftProvider);
+    final items = draft.values.toList();
+    final total = ref.read(draftProvider.notifier).total;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pedido actual'),
@@ -37,58 +40,57 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Row(
-              children: [
-                FilledButton.tonal(
-                  onPressed: () => setState(() => _draft.add(const OrderItem(
-                      productId: 1,
-                      qty: 1,
-                      nameSnapshot: 'Essence Mascara (demo)',
-                      priceSnapshot: 9.99))),
-                  child: const Text('Agregar ID 1'),
-                ),
-                const SizedBox(width: 8),
-                FilledButton.tonal(
-                  onPressed: () => setState(() => _draft.add(const OrderItem(
-                      productId: 2,
-                      qty: 1,
-                      nameSnapshot: 'Apple (demo)',
-                      priceSnapshot: 1.99))),
-                  child: const Text('Agregar ID 2'),
-                ),
-              ],
-            ),
             const SizedBox(height: 12),
-            Text('Total estimado: \$${_total.toStringAsFixed(2)}',
+            Text('Total estimado: \$${total.toStringAsFixed(2)}',
                 style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
             Expanded(
-              child: _draft.isEmpty
+              child: items.isEmpty
                   ? const Center(
                       child: Text(
-                          'Borrador vacío. Agrega productos o escanea un QR.'))
+                          'Borrador vacío. Agrega desde el catálogo o escanea un QR.'))
                   : ListView.builder(
-                      itemCount: _draft.length,
-                      itemBuilder: (_, i) => ListTile(
-                        title: Text(_draft[i].nameSnapshot),
-                        subtitle:
-                            Text('ID ${_draft[i].productId} x${_draft[i].qty}'),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete_outline),
-                          onPressed: () => setState(() => _draft.removeAt(i)),
-                        ),
-                      ),
+                      itemCount: items.length,
+                      itemBuilder: (_, i) {
+                        final it = items[i];
+                        return ListTile(
+                          title: Text(it.nameSnapshot),
+                          subtitle: Text(
+                              'ID ${it.productId} · \$${it.priceSnapshot.toStringAsFixed(2)} c/u'),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.remove_circle_outline),
+                                onPressed: () => ref
+                                    .read(draftProvider.notifier)
+                                    .decrement(it.productId),
+                              ),
+                              Text('${it.qty}',
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium),
+                              IconButton(
+                                icon: const Icon(Icons.add_circle_outline),
+                                onPressed: () => ref
+                                    .read(draftProvider.notifier)
+                                    .increment(it.productId),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
             ),
             FilledButton(
-              onPressed: _draft.isEmpty
+              onPressed: items.isEmpty
                   ? null
                   : () async {
                       await ref
                           .read(ordersProvider.notifier)
-                          .createWithItems(List.of(_draft));
-                      setState(_draft.clear);
+                          .createWithItems(items);
+                      ref.read(draftProvider.notifier).clear();
                       if (context.mounted) context.go('/history');
                     },
               child: const Text('Guardar pedido (pendiente)'),

@@ -9,8 +9,19 @@ class OrdersLocalDs {
 
   Future<Order> insertOrder(List<OrderItem> items) async {
     assert(items.isNotEmpty);
+    // Fusiona duplicados por productId: una sola fila por producto (PK).
+    final merged = <int, OrderItem>{};
     for (final i in items) {
       assert(i.qty > 0, 'cantidad debe ser > 0');
+      final prev = merged[i.productId];
+      merged[i.productId] = prev == null
+          ? i
+          : OrderItem(
+              productId: i.productId,
+              qty: prev.qty + i.qty,
+              nameSnapshot: prev.nameSnapshot,
+              priceSnapshot: prev.priceSnapshot,
+            );
     }
     final db = await dbGetter();
     final id = const Uuid().v4();
@@ -23,7 +34,7 @@ class OrdersLocalDs {
         'updatedAt': now,
         'attempts': 0,
       });
-      for (final item in items) {
+      for (final item in merged.values) {
         await txn.insert('order_items', item.toMap(id));
       }
     });
