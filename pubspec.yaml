@@ -28,8 +28,25 @@ dev_dependencies:
   mocktail: ^1.0.3
   sqflite_common_ffi: ^2.3.3
   rename_app: ^1.6.1
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.4.1
 
 flutter:
   uses-material-design: true
   assets:
     - .env
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/logos/Dsystems.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/logos/Dsystems.png"
+
+flutter_native_splash:
+  color: "#FFFFFF" 
+  image: "assets/logos/color_logo.png"
+  android_12:
+    image: "assets/logos/Dsystems.png"
+    color: "#FFFFFF"
