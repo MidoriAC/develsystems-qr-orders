@@ -152,7 +152,7 @@ DummyJSON (dobles con `mocktail`, SQLite con `sqflite_common_ffi`).
 - Release: https://github.com/MidoriAC/develsystems-qr-orders/releases/tag/v1.0.0
 - AAR: `qrscan-sdk-release.aar` (adjunto a la Release)
 - APK: `app-debug.apk` (adjunto a la Release)
-- Video (3-5 min): *(link público — completar)*
+- Video (3-5 min): https://drive.google.com/file/d/1mtf_uS5LwH1oDuZnrI-dEWpCrLQXlUZa/view?usp=sharing
 
 ## Herramientas, dispositivo, tiempo y límites
 
