@@ -311,6 +311,14 @@ packages:
       relative: true
     source: path
     version: "0.1.0"
+  rename_app:
+    dependency: "direct dev"
+    description:
+      name: rename_app
+      sha256: "9df79b531a59124f3ec60316385809f79835eccf934a1ca7051f602a988acade"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.6.6"
   riverpod:
     dependency: transitive
     description:
@@ -492,6 +500,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.5.0"
+  yaml:
+    dependency: transitive
+    description:
+      name: yaml
+      sha256: f67cdd8e07d3c6329146aaef1ba043542b3134c12489f553ca9a7435d1068aea
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.4"
 sdks:
   dart: ">=3.6.0 <4.0.0"
   flutter: ">=3.24.0"
