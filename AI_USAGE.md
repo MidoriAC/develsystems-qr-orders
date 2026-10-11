@@ -12,7 +12,7 @@
 
 | Fecha | Tarea | Archivos |
 |---|---|---|
-| 2026-10-08 | Definición de stack y estructura clean por feature | `pubspec.yaml`, `lib/config/`, `lib/core/`, `lib/features/catalog/`, `lib/features/orders/`, `lib/features/scan/`, `.env`, `.env.example` |
+| 2026-10-08 | Núcleo app: Dio+timeouts, SQLite 3 tablas, entidades, repos, providers Riverpod, router y 3 pantallas mínimas | `lib/config/constants.dart`, `lib/config/router.dart`, `lib/core/http/dio_client.dart`, `lib/core/db/app_database.dart`, `lib/features/catalog/**`, `lib/features/orders/**`, `lib/main.dart` |
 | 2026-10-08 | Registro inicial de flujo de trabajo (sin push/pull, commit propuesto por IA) | `AI_USAGE.md` |
 
 ## 3. Prompts representativos
@@ -27,9 +27,9 @@
 
 ## 5. Verificación
 
-- [ ] `flutter pub get` — pendiente.
-- [ ] `flutter analyze` — pendiente.
-- [ ] `flutter test` — pendiente.
+- [x] `flutter pub get` — OK 2026-10-08.
+- [x] `flutter analyze` — sin issues 2026-10-08.
+- [ ] `flutter test` — pendiente (siguiente paso: tests repo + cola + puente con dobles).
 - [ ] `git status` — solo cambios locales, sin push (por norma del candidato).
 
 ## 6. Sin comprobar aún
