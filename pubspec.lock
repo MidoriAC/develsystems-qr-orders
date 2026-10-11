@@ -304,6 +304,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
+  qr_bridge:
+    dependency: "direct main"
+    description:
+      path: "plugin/qr_bridge"
+      relative: true
+    source: path
+    version: "0.1.0"
   riverpod:
     dependency: transitive
     description:

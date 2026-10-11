@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:qr_bridge/qr_bridge.dart';
 
 import '../providers/draft_providers.dart';
 import '../providers/orders_providers.dart';
+import '../../../scan/presentation/scan_providers.dart';
 import '../../../catalog/presentation/providers/catalog_providers.dart';
 
 /// Pedido actual: borrador compartido con catálogo.
@@ -21,6 +23,37 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
       ref.read(ordersProvider.notifier).init();
       ref.read(catalogProvider.notifier).loadCachedThenRefresh();
     });
+  }
+
+  Future<void> _scan() async {
+    try {
+      final id = await ref.read(qrBridgeProvider).scanProduct();
+      final product =
+          await ref.read(catalogRepositoryProvider).findById(id);
+      if (!mounted) return;
+      if (product == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(
+                  'Producto $id no encontrado o no disponible sin conexión')),
+        );
+        return;
+      }
+      ref.read(draftProvider.notifier).addProduct(product);
+    } on QrScanException catch (e) {
+      if (!mounted || e.code == QrScanCodes.cancelled) return;
+      final msg = switch (e.code) {
+        QrScanCodes.permissionDenied =>
+          'Permiso de cámara denegado. Concédelo para escanear.',
+        QrScanCodes.cameraUnavailable => 'Cámara no disponible en este momento.',
+        QrScanCodes.invalidQr =>
+          'QR inválido. Usa el formato product:{id} (ej. product:1).',
+        QrScanCodes.scanInProgress => 'Ya hay una lectura en curso.',
+        _ => 'Error de lectura: ${e.message}',
+      };
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(msg)));
+    }
   }
 
   @override
@@ -42,6 +75,11 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            FilledButton.icon(
+              onPressed: _scan,
+              icon: const Icon(Icons.qr_code_scanner),
+              label: const Text('Escanear QR'),
+            ),
             const SizedBox(height: 12),
             Text('Total estimado: \$${total.toStringAsFixed(2)}',
                 style: Theme.of(context).textTheme.titleMedium),

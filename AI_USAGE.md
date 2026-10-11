@@ -18,6 +18,7 @@
 | 2026-10-11 | Fix borrador: merge por `productId` en `insertOrder`, borrador compartido catalog→pedido, cantidades editables, sin IDs quemados | `orders_local_ds.dart`, `draft_providers.dart`, `order_screen.dart`, `catalog_screen.dart` |
 | 2026-10-11 | Evaluación de punto estable (solo lectura) + JDK 17 para AGP 8.1 | `android/gradle.properties` |
 | 2026-10-11 | SDK Kotlin `qrscan-sdk`: validador, sesión terminal única, contrato, Activity CameraX+MLKit, tests JVM 7/7, AAR, README nativo | `native/qrscan-sdk/**`, `android/settings.gradle` |
+| 2026-10-11 | Puente `qr_bridge` (MethodChannel) + integración en pedido + tests Dart 3/3 + APK debug | `android/app/.../MainActivity.kt`, `android/app/build.gradle`, `plugin/qr_bridge/**`, `lib/features/scan/**`, `order_screen.dart`, `test/qr_bridge_test.dart` |
 | 2026-10-08 | Registro inicial de flujo de trabajo (sin push/pull, commit propuesto por IA) | `AI_USAGE.md` |
 
 ## 3. Prompts representativos
@@ -38,7 +39,8 @@
 - [x] JDK 17 (`C:\Program Files\Java\jdk-17.0.12`) fijado en `android/gradle.properties` — AGP 8.1 lo exige (el `java` del PATH es 11).
 - [x] `:qrscan-sdk:testDebugUnitTest` — 7/7 OK 2026-10-11.
 - [x] `:qrscan-sdk:assembleRelease` — `build/qrscan-sdk/outputs/aar/qrscan-sdk-release.aar` OK 2026-10-11.
-- [ ] `flutter test` — pendiente.
+- [x] `flutter test` (puente) — 3/3 OK 2026-10-11.
+- [x] `flutter build apk --debug` — `build/app/outputs/flutter-apk/app-debug.apk` OK 2026-10-11.
 - [ ] REST real contra `https://dummyjson.com` — pendiente de verificación manual.
 - [ ] `git status` — commits locales por subir, sin push (por norma del candidato).
 

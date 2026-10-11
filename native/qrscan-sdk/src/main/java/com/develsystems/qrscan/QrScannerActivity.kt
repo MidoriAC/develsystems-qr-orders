@@ -27,6 +27,18 @@ import java.util.concurrent.Executor
  */
 class QrScannerActivity : ComponentActivity() {
 
+    companion object {
+        private var active: java.lang.ref.WeakReference<QrScannerActivity>? = null
+
+        /** Cierra la pantalla activa (puente: `cancelScan`). Referencia débil: sin fugas. */
+        fun cancelActive() {
+            val activity = active?.get() ?: return
+            activity.runOnUiThread {
+                if (!activity.session.isFinished) activity.session.cancel()
+            }
+        }
+    }
+
     private lateinit var mainExecutor: Executor
     private var previewView: PreviewView? = null
     private var cameraProvider: ProcessCameraProvider? = null
@@ -56,6 +68,7 @@ class QrScannerActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        active = java.lang.ref.WeakReference(this)
         mainExecutor = ContextCompat.getMainExecutor(this)
         val previewView = PreviewView(this).apply {
             layoutParams = FrameLayout.LayoutParams(
@@ -88,6 +101,7 @@ class QrScannerActivity : ComponentActivity() {
     }
 
     override fun onDestroy() {
+        if (active?.get() === this) active = null
         cameraProvider?.unbindAll()
         barcodeScanner.close()
         super.onDestroy()
