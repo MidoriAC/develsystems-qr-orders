@@ -1,11 +1,10 @@
+import 'package:develsystems_qr_orders/features/shared/widgets/producto_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../orders/presentation/providers/draft_providers.dart';
 import '../providers/catalog_providers.dart';
 
-/// Catálogo: lee SQLite, estados carga/vacío/error/offline (§2 UI).
 class CatalogScreen extends ConsumerStatefulWidget {
   const CatalogScreen({super.key});
   @override
@@ -74,36 +73,20 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
           return RefreshIndicator(
             onRefresh: () =>
                 ref.read(catalogProvider.notifier).loadCachedThenRefresh(),
-            child: ListView.builder(
+            child: GridView.builder(
+              padding: const EdgeInsets.all(16),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 16,
+                childAspectRatio: 0.7,
+              ),
               itemCount: s.items.length,
               itemBuilder: (_, i) {
                 final p = s.items[i];
-                return ListTile(
-                  leading: p.thumbnail != null
-                      ? Image.network(p.thumbnail!,
-                          width: 48,
-                          errorBuilder: (_, __, ___) =>
-                              const Icon(Icons.image_not_supported))
-                      : const Icon(Icons.shopping_bag_outlined),
-                  title: Text(p.title),
-                  subtitle: Text(
-                      'ID ${p.id} · \$${p.price.toStringAsFixed(2)} (estimado)'),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.add_shopping_cart_outlined),
-                    tooltip: 'Agregar al pedido',
-                    onPressed: () {
-                      ref.read(draftProvider.notifier).addProduct(p);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('${p.title} agregado'),
-                          action: SnackBarAction(
-                            label: 'Ver pedido',
-                            onPressed: () => context.go('/order'),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                return GestureDetector(
+                  onTap: () => context.go('/product/${p.id}'),
+                  child: ProductoContainer(product: p),
                 );
               },
             ),

@@ -19,6 +19,9 @@
 | 2026-10-11 | Evaluación de punto estable (solo lectura) + JDK 17 para AGP 8.1 | `android/gradle.properties` |
 | 2026-10-11 | SDK Kotlin `qrscan-sdk`: validador, sesión terminal única, contrato, Activity CameraX+MLKit, tests JVM 7/7, AAR, README nativo | `native/qrscan-sdk/**`, `android/settings.gradle` |
 | 2026-10-11 | Puente `qr_bridge` (MethodChannel) + integración en pedido + tests Dart 3/3 + APK debug | `android/app/.../MainActivity.kt`, `android/app/build.gradle`, `plugin/qr_bridge/**`, `lib/features/scan/**`, `order_screen.dart`, `test/qr_bridge_test.dart` |
+| 2026-10-11 | Entidad Product enriquecida (DummyJSON), migración DB v1→v2, búsqueda offline, detalle, rutas /search y /product/:id, nav inferior funcional | IA + candidato: `product.dart`, `app_database.dart`, `catalog_state.dart`, `catalog_notifier.dart`, `search_screen.dart`, `product_detail_screen.dart`, `router.dart`, `bottom_navigation_menu.dart`, `catalog_screen.dart` |
+| 2026-10-11 | UI candidato: catálogo en grid con `ProductoContainer`, filtros por categoría en búsqueda, QR de prueba, logo | Candidato: `catalog_screen.dart`, `producto_container.dart`, `search_screen.dart`, `assets/logos/Dsystems.png`, `product_1/2/3.png` |
+| 2026-10-11 | Limpieza deprecados (`withOpacity`→`withValues`) | IA: `search_screen.dart`, `producto_container.dart` |
 | 2026-10-08 | Registro inicial de flujo de trabajo (sin push/pull, commit propuesto por IA) | `AI_USAGE.md` |
 
 ## 3. Prompts representativos

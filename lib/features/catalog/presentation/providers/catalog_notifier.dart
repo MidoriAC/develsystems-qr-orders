@@ -20,4 +20,6 @@ class CatalogNotifier extends Notifier<CatalogState> {
           isLoading: false, error: e.toString(), isOffline: true);
     }
   }
+
+  void setQuery(String q) => state = state.copyWith(query: q);
 }

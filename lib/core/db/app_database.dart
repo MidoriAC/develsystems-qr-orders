@@ -21,7 +21,7 @@ class AppDatabase {
         _overridePath ?? p.join(await getDatabasesPath(), 'qr_orders.db');
     return openDatabase(
       path,
-      version: 1,
+      version: 2,
       onConfigure: (d) async => d.execute('PRAGMA foreign_keys = ON'),
       onCreate: (d, v) async {
         await d.execute('''
@@ -30,7 +30,17 @@ class AppDatabase {
             title TEXT NOT NULL,
             price REAL NOT NULL,
             thumbnail TEXT,
-            updatedAt TEXT NOT NULL
+            updatedAt TEXT NOT NULL,
+            description TEXT,
+            category TEXT,
+            brand TEXT,
+            sku TEXT,
+            stock INTEGER,
+            rating REAL,
+            discountPercentage REAL,
+            availabilityStatus TEXT,
+            tags TEXT,
+            images TEXT
           )''');
         await d.execute('''
           CREATE TABLE orders(
@@ -51,6 +61,25 @@ class AppDatabase {
             priceSnapshot REAL NOT NULL,
             PRIMARY KEY(orderId, productId)
           )''');
+      },
+      // v1 → v2: columnas enriquecidas (todas nulables: hay filas v1).
+      onUpgrade: (d, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          for (final col in [
+            'description TEXT',
+            'category TEXT',
+            'brand TEXT',
+            'sku TEXT',
+            'stock INTEGER',
+            'rating REAL',
+            'discountPercentage REAL',
+            'availabilityStatus TEXT',
+            'tags TEXT',
+            'images TEXT',
+          ]) {
+            await d.execute('ALTER TABLE products ADD COLUMN $col');
+          }
+        }
       },
     );
   }

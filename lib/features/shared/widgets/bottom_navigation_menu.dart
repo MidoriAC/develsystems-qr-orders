@@ -60,7 +60,7 @@ class _BottomNavigationMenuState extends ConsumerState<BottomNavigationMenu> {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 20,
             offset: const Offset(0, -5),
           ),
@@ -77,27 +77,31 @@ class _BottomNavigationMenuState extends ConsumerState<BottomNavigationMenu> {
                 _buildNavItem(
                   context,
                   icon: Icons.home,
+                  label: 'Inicio',
                   isSelected: currentIndex == 0,
                   onTap: () => context.go('/'),
                 ),
                 _buildNavItem(
                   context,
                   icon: Icons.search,
+                  label: 'Buscar',
                   isSelected: currentIndex == 1,
-                  onTap: () => context.go('/'),
+                  onTap: () => context.go('/search'),
                 ),
                 const SizedBox(width: 60),
                 _buildNavItem(
                   context,
                   icon: Icons.history,
+                  label: 'Historial',
                   isSelected: currentIndex == 2,
                   onTap: () => context.go('/history'),
                 ),
                 _buildNavItem(
                   context,
                   icon: Icons.shopping_cart,
+                  label: 'Pedido',
                   isSelected: currentIndex == 3,
-                  onTap: () => context.go('/'),
+                  onTap: () => context.go('/order'),
                 ),
               ],
             ),
@@ -112,7 +116,7 @@ class _BottomNavigationMenuState extends ConsumerState<BottomNavigationMenu> {
                   gradient: LinearGradient(
                     colors: [
                       Theme.of(context).colorScheme.primary,
-                      Theme.of(context).colorScheme.primary.withOpacity(0.8),
+                      Theme.of(context).colorScheme.primary.withValues(alpha: 0.8),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -123,7 +127,7 @@ class _BottomNavigationMenuState extends ConsumerState<BottomNavigationMenu> {
                       color: Theme.of(context)
                           .colorScheme
                           .primary
-                          .withOpacity(0.4),
+                          .withValues(alpha: 0.4),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
@@ -149,6 +153,7 @@ class _BottomNavigationMenuState extends ConsumerState<BottomNavigationMenu> {
   Widget _buildNavItem(
     BuildContext context, {
     required IconData icon,
+    required String label,
     required bool isSelected,
     required VoidCallback onTap,
   }) {
@@ -156,24 +161,39 @@ class _BottomNavigationMenuState extends ConsumerState<BottomNavigationMenu> {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
           color: isSelected
               ? Theme.of(context).colorScheme.primary
               : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Icon(
-          icon,
-          size: 26,
-          color: isSelected ? Colors.white : Colors.grey.shade600,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 26,
+              color: isSelected ? Colors.white : Colors.grey.shade600,
+            ),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 10,
+                color: isSelected ? Colors.white : Colors.grey.shade600,
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
   int _calculateSelectedIndex(String location) {
-    if (location.startsWith('/home')) return 0;
+    if (location.startsWith('/search')) return 1;
+    if (location.startsWith('/history')) return 2;
+    if (location.startsWith('/order')) return 3;
+    if (location == '/' || location.startsWith('/product')) return 0;
     return -1;
   }
 }
