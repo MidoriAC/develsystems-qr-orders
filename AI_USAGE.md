@@ -23,6 +23,7 @@
 | 2026-10-11 | UI candidato: catálogo en grid con `ProductoContainer`, filtros por categoría en búsqueda, QR de prueba, logo | Candidato: `catalog_screen.dart`, `producto_container.dart`, `search_screen.dart`, `assets/logos/Dsystems.png`, `product_1/2/3.png` |
 | 2026-10-11 | Limpieza deprecados (`withOpacity`→`withValues`) | IA: `search_screen.dart`, `producto_container.dart` |
 | 2026-10-11 | `settings.gradle` propio del SDK (apertura standalone en AS) | IA: `native/qrscan-sdk/settings.gradle` |
+| 2026-10-11 | Fixtures a su sitio, tests Dart repos/cola (13/13) y README completo | IA + candidato: `assets/qr/*`, `test/fixtures/*`, `test/orders_local_test.dart`, `test/orders_queue_test.dart`, `test/catalog_repository_test.dart`, `README.md` |
 | 2026-10-08 | Registro inicial de flujo de trabajo (sin push/pull, commit propuesto por IA) | `AI_USAGE.md` |
 
 ## 3. Prompts representativos
