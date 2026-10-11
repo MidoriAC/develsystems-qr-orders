@@ -32,9 +32,9 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
               child: Chip(label: Text('Offline')),
             ),
           IconButton(
-            icon: const Icon(Icons.receipt_long),
-            onPressed: () => context.go('/history'),
-            tooltip: 'Historial',
+            icon: const Icon(Icons.shopping_cart),
+            onPressed: () => context.go('/order'),
+            tooltip: 'Orden',
           ),
         ],
       ),

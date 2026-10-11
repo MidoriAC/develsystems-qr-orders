@@ -28,8 +28,7 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
   Future<void> _scan() async {
     try {
       final id = await ref.read(qrBridgeProvider).scanProduct();
-      final product =
-          await ref.read(catalogRepositoryProvider).findById(id);
+      final product = await ref.read(catalogRepositoryProvider).findById(id);
       if (!mounted) return;
       if (product == null) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -45,14 +44,14 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
       final msg = switch (e.code) {
         QrScanCodes.permissionDenied =>
           'Permiso de cámara denegado. Concédelo para escanear.',
-        QrScanCodes.cameraUnavailable => 'Cámara no disponible en este momento.',
+        QrScanCodes.cameraUnavailable =>
+          'Cámara no disponible en este momento.',
         QrScanCodes.invalidQr =>
           'QR inválido. Usa el formato product:{id} (ej. product:1).',
         QrScanCodes.scanInProgress => 'Ya hay una lectura en curso.',
         _ => 'Error de lectura: ${e.message}',
       };
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(msg)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
     }
   }
 
@@ -131,7 +130,7 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
                       ref.read(draftProvider.notifier).clear();
                       if (context.mounted) context.go('/history');
                     },
-              child: const Text('Guardar pedido (pendiente)'),
+              child: const Text('Guardar pedido'),
             ),
           ],
         ),

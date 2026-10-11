@@ -116,7 +116,10 @@ class _BottomNavigationMenuState extends ConsumerState<BottomNavigationMenu> {
                   gradient: LinearGradient(
                     colors: [
                       Theme.of(context).colorScheme.primary,
-                      Theme.of(context).colorScheme.primary.withValues(alpha: 0.8),
+                      Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withValues(alpha: 0.8),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -163,9 +166,7 @@ class _BottomNavigationMenuState extends ConsumerState<BottomNavigationMenu> {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
-          color: isSelected
-              ? Theme.of(context).colorScheme.primary
-              : Colors.transparent,
+          color: isSelected ? Color(0xFF2596be) : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
